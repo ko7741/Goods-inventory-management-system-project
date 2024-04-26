@@ -9,8 +9,7 @@ class Item(db.Model):
     id=db.Column(db.Integer, primary_key=True) #물품 고유 번호
     itemname=db.Column(db.String, unique=True, index=True)#물품 이름
     item_quantity=db.Column(db.Integer)#물품 수량
-    in_time=db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)#입고 날짜
-    out_time=db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)#출고 날짜
+    time=db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)#입고 날짜
     item_description = db.Column(db.String)#물품 설명
 
 class Representative(db.Model):

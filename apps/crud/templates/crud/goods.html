@@ -1,0 +1,27 @@
+{% extends "crud/base.html" %}
+{% block title%}제품 목록{% endblock %}
+{% block content %}
+    <h2>제품 목록</h2>
+    <a href="{{url_for('crud.create_goods',filename='style.css')}}">신규 제품 등록</a>
+
+    <table>
+        <tr>
+            <th>제품 ID</th>
+            <th>제품명</th>
+            <th>제품 수량</th>
+            <th>시간</th>
+            <th>제품 설명</th>
+        </tr>
+        {% for item in goods%}
+        <tr>
+            <td>
+                {{ item.id }}
+            </td>
+            <td>{{ item.itemname}}</td>
+            <td>{{ item.item_quantity}}</td>
+            <td>{{ item.time}}</td>
+            <td>{{ item.item_description}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
