@@ -18,6 +18,7 @@ class Representative(db.Model):
     __tablename__ = "Representative"
 
     username = db.Column(db.String, index=True, primary_key=True)
+    useremail = db.Column(db.String, unique=True, index=True)
     password_hash = db.Column(db.String)
 
     @property
