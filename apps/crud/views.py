@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template,redirect,url_for
-from apps.crud.forms import ItemFrom
+from apps.crud.forms import ItemForm
 from apps.app import db
-from apps.crud.models import Item
+from apps.crud.models import Item,Log
 from datetime import datetime
 
 crud = Blueprint(
@@ -17,7 +17,7 @@ def index():
 
 @crud.route("/goods/new",methods=["GET","POST"])
 def create_goods():
-    form = ItemFrom()
+    form = ItemForm()
     if form.validate_on_submit():
 
         item = Item(
@@ -26,7 +26,14 @@ def create_goods():
             time=form.time.data,
             item_description=form.item_description.data,
         )
+        log= Log(
+            log_itemname=form.itemname.data,
+            log_item_quantity=form.item_quantity.data,
+            log_item_quantity_now=form.item_quantity.data,
+            log_time=datetime.now()
+        )
         db.session.add(item)
+        db.session.add(log)
         db.session.commit()
         return redirect(url_for("crud.goods"))
     return render_template("crud/create.html", form=form)
@@ -34,4 +41,38 @@ def create_goods():
 @crud.route("/goods")
 def goods():
     goods=Item.query.all()
-    return render_template("crud/goods.html", goods = goods)
+    logs=Log.query.all()
+    return render_template("crud/goods.html", goods = goods, logs=logs)
+
+@crud.route("/goods/<goods_id>", methods=["GET","POST"])
+def change_quantity(goods_id):
+    form = ItemForm()
+    goods = Item.query.filter_by(id=goods_id).first()
+
+    if form.validate_on_submit():
+        log= Log(
+            log_itemname=form.itemname.data,
+            log_item_quantity=(form.item_quantity.data-goods.item_quantity),
+            log_item_quantity_now=form.item_quantity.data,
+            log_time=datetime.now()
+        )
+        goods.itemname=form.itemname.data
+        goods.item_quantity=form.item_quantity.data
+        goods.time=datetime.now()
+        goods.item_description=form.item_description.data
+
+        db.session.add(goods)
+        db.session.add(log)
+        db.session.commit()
+        return redirect(url_for("crud.goods"))
+    form.item_description.data = goods.item_description
+    return render_template("crud/change_quantity.html",item = goods,form=form)
+
+    
+# @crud.route("/goods/<goods_itemname>/delete", methods=["POST"])
+# def delete_goods(goods_itemname):
+#     item = Item.query.filter_by(itemname=goods_itemname).first()
+#     db.session.delete(item)
+#     db.session.commit()
+#     return redirect(url_for("url_for(crud.goods)"))
+

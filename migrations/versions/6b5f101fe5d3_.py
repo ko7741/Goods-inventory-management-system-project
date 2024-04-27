@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c64a9021a4f4
+Revision ID: 6b5f101fe5d3
 Revises: 
-Create Date: 2024-04-26 16:48:02.605564
+Create Date: 2024-04-27 17:21:42.500538
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c64a9021a4f4'
+revision = '6b5f101fe5d3'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,6 +28,17 @@ def upgrade():
     )
     with op.batch_alter_table('Items', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_Items_itemname'), ['itemname'], unique=True)
+
+    op.create_table('Log',
+    sa.Column('log_id', sa.Integer(), nullable=False),
+    sa.Column('log_itemname', sa.String(), nullable=True),
+    sa.Column('log_item_quantity', sa.Integer(), nullable=True),
+    sa.Column('log_item_quantity_now', sa.Integer(), nullable=True),
+    sa.Column('log_time', sa.DateTime(), nullable=True),
+    sa.PrimaryKeyConstraint('log_id')
+    )
+    with op.batch_alter_table('Log', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_Log_log_itemname'), ['log_itemname'], unique=False)
 
     op.create_table('Representative',
     sa.Column('username', sa.String(), nullable=False),
@@ -49,6 +60,10 @@ def downgrade():
         batch_op.drop_index(batch_op.f('ix_Representative_useremail'))
 
     op.drop_table('Representative')
+    with op.batch_alter_table('Log', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_Log_log_itemname'))
+
+    op.drop_table('Log')
     with op.batch_alter_table('Items', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_Items_itemname'))
 

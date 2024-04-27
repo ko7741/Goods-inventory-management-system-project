@@ -27,4 +27,12 @@ class Representative(db.Model):
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
-    
+
+class Log(db.Model):
+    __tablename__ ="Log"
+
+    log_id=db.Column(db.Integer, primary_key=True) #순서
+    log_itemname=db.Column(db.String, index=True)#물품 이름
+    log_item_quantity=db.Column(db.Integer)#제품 수량 변경값 (+-)
+    log_item_quantity_now=db.Column(db.Integer)#제품 물품 수량
+    log_time=db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)#실시 시간

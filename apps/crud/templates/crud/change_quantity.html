@@ -1,37 +1,37 @@
 {% extends "crud/base.html" %}
-{% block title%}신규 물품 등록{% endblock %}
+{% block title%}수량 변경{% endblock %}
 {% block content %}
-    <h2>신규 물품 등록</h2>
+    <h2>수량 변경</h2>
     <form
-        action="{{url_for('crud.create_goods')}}"
+        action="{{ url_for('crud.change_quantity', goods_id=item.id) }}"
         method="POST"
         novalidate="novalidate"
     >
         {{form.csrf_token}}
-        <p>
-            {{ form.itemname.label}} {{form.itemname(placeholder="물품명")}}
+        <p >
+            {{ form.itemname.label}} {{form.itemname(placeholder="제품명", value=item.itemname,readonly=True)}}
         </p>
         {% for error in form.itemname.errors %}
         <span style="color: red;">{{error}}</span>
         {% endfor %}
         <p>
-            {{ form.item_quantity.label}} {{form.item_quantity(placeholder="제품 수량")}}
+            {{ form.item_quantity.label}} {{form.item_quantity(placeholder=item.item_quantity)}}
         </p>
         {% for error in form.item_quantity.errors %}
         <span style="color: red;">{{error}}</span>
         {% endfor %}
         <p>
-            {{ form.time.label}} {{form.time(placeholder="날짜 시간" )}}
+            {{ form.time.label("마지막 변경 시간")}} {{form.time(placeholder="날짜 시간", value=item.time.strftime('%Y-%m-%d %H:%M'), readonly=True)}}
         </p>
         {% for error in form.time.errors %}
         <span style="color: red;">{{error}}</span>
         {% endfor %}
         <p>
-            {{ form.item_description.label}} {{form.item_description(placeholder="제품 설명")}}
+            {{ form.item_description.label}} {{ form.item_description(placeholder="제품 설명", value=item.item_description, readonly=True) }}
         </p>
         {% for error in form.item_description.errors %}
         <span style="color: red;">{{error}}</span>
         {% endfor %}
-        <p>{{ form.submit() }}</p>
+        <p><input type="submit" value="변경"></p>
     </form>
 {% endblock %}

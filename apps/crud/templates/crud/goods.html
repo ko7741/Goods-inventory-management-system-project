@@ -6,11 +6,11 @@
 
     <table>
         <tr>
-            <th>제품 ID</th>
-            <th>제품명</th>
-            <th>제품 수량</th>
+            <th>물품 ID</th>
+            <th>물품명</th>
+            <th>물품 수량</th>
             <th>시간</th>
-            <th>제품 설명</th>
+            <th>물품 설명</th>
         </tr>
         {% for item in goods%}
         <tr>
@@ -19,9 +19,40 @@
             </td>
             <td>{{ item.itemname}}</td>
             <td>{{ item.item_quantity}}</td>
-            <td>{{ item.time}}</td>
+            <td>{{ item.time.strftime('%Y-%m-%d %H:%M')}}</td>
             <td>{{ item.item_description}}</td>
+            <td>
+                <a href="{{ url_for('crud.change_quantity',goods_id=item.id)}}"><button>수량변경</button></a>
+            </td>
         </tr>
         {% endfor %}
     </table>
+
+    <details>
+        <summary>LOG보기</summary>
+        <!-- <select id="goods" name="items">
+            <option value="전체">전체</option>
+            {% for item in goods%}
+            <option value=item.itemname>{{ item.itemname }}</option>
+            {% endfor %}
+        </select> -->
+        <ul>
+            {% for log in logs %}
+            <li class="log-item">
+                <p>
+                {{log.log_id}}
+                {{log.log_itemname}}
+                <span>변경값:</span>
+                {% if log.log_item_quantity>0%}
+                    <span>+</span>{{log.log_item_quantity}}
+                {% else%}
+                {{log.log_item_quantity}}
+                {% endif %}
+                <span>현재값:</span>{{log.log_item_quantity_now}}
+                <span>시간:</span>{{log.log_time.strftime('%Y-%m-%d %H:%M:%S')}}
+                </p>
+            </li>
+            {% endfor %}
+        </ul>
+      </details>
 {% endblock %}

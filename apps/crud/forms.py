@@ -3,7 +3,7 @@ from wtforms import PasswordField, StringField, SubmitField,IntegerField,TextAre
 from wtforms.validators import DataRequired,Email,Length
 
 #신규 물품 작성 폼
-class ItemFrom(FlaskForm):
+class ItemForm(FlaskForm):
     itemname = StringField(
         "물품명",
         validators=[
@@ -24,10 +24,10 @@ class ItemFrom(FlaskForm):
         ]
     )
     item_description=TextAreaField(
-        "제품 설명",
+        "물품 설명",
         validators=[
             DataRequired(message="설명을 제대로 작성해주세요.")
         ]
     )
-    submit = SubmitField("신규 상품 등록")
+    submit = SubmitField("신규 물품 등록")
 
