@@ -50,6 +50,7 @@
                 {% endif %}
                 <span>현재값:</span>{{log.log_item_quantity_now}}
                 <span>시간:</span>{{log.log_time.strftime('%Y-%m-%d %H:%M:%S')}}
+                <span>관리자:</span>{{log.log_representative}}
                 </p>
             </li>
             {% endfor %}
