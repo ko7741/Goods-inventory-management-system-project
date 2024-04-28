@@ -24,12 +24,28 @@
             <td>
                 <a href="{{ url_for('crud.change_quantity',goods_id=item.id)}}"><button>수량변경</button></a>
             </td>
+            <td>
+                <form
+                    action="{{url_for('crud.delete_goods', goods_itemname = item.itemname)}}"
+                    method="POST"
+                >
+                    {{ form.csrf_token }}
+                    <input type="submit" value="삭제">
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
 
     <details>
         <summary>LOG보기</summary>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
         <!-- <select id="goods" name="items">
             <option value="전체">전체</option>
             {% for item in goods%}
@@ -42,18 +58,44 @@
                 <p>
                 {{log.log_id}}
                 {{log.log_itemname}}
-                <span>변경값:</span>
-                {% if log.log_item_quantity>0%}
-                    <span>+</span>{{log.log_item_quantity}}
-                {% else%}
-                {{log.log_item_quantity}}
+                <span>입/출고:</span>
+                {% if log.log_item_quantity is not none %}
+                    {% if log.log_item_quantity > 0 %}
+                        <span>+</span>{{ log.log_item_quantity }}
+                    {% else %}
+                        {{ log.log_item_quantity }}
+                    {% endif %}
+                {% else %}
+                    <span>삭제</span>
                 {% endif %}
-                <span>현재값:</span>{{log.log_item_quantity_now}}
+                <span>현재 수량:</span>
+                {% if log.log_item_quantity is not none %}
+                    {{log.log_item_quantity_now}}
+                {% else %}
+                    <span>삭제</span>
+                {% endif %}
                 <span>시간:</span>{{log.log_time.strftime('%Y-%m-%d %H:%M:%S')}}
                 <span>관리자:</span>{{log.log_representative}}
                 </p>
             </li>
             {% endfor %}
+            
+            <form
+                action="{{url_for('crud.delete_log')}}"
+                method="POST"
+            >
+                {{ form.csrf_token }}
+                <input type="submit" value="LOG삭제" onclick="Delete()">
+            </form>
+            
         </ul>
-      </details>
+    </details>
+    <script>
+        function Delete() {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                    
+                    window.location.href = "{{ url_for('crud.delete_log') }}";
+                }
+            }
+    </script>
 {% endblock %}

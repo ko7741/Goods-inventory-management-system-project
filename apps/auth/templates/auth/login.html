@@ -6,7 +6,8 @@
 <form 
     action="{{ url_for('auth.login') }}" 
     method="post" 
-    novalidate="novalidate">
+    novalidate="novalidate"
+>
     {% for message in get_flashed_messages() %}
         <p style="color: red;">{{ message }}</p>
     {% endfor %} {{ form.csrf_token }}
