@@ -1,0 +1,33 @@
+<script>
+        let a = document.querySelector("#goods")
+        let csrf_token_value = "{{ form.csrf_token._value() }}";
+        a.addEventListener("change",(e)=>{
+            
+            const request = new XMLHttpRequest()
+
+            const value = e.target.value
+            switch(value){
+                case '라면' : 
+                    request.open("GET", `{{url_for('crud.log_value_view', value='라면')}}`)
+                    break
+                case '사이다' : 
+                    request.open("GET", `{{url_for('crud.log_value_view', value='사이다')}}`)
+                    break
+            }
+            request.addEventListener("load", function(){
+                console.log(JSON.parse(request.response))
+                console.log(request.response)
+            })
+            request.send()
+
+        })
+
+    </script>
+@crud.route("/logvalue/<value>", methods=["GET"])
+def log_value_view(value):
+    print(value)
+    form = ItemForm()
+    goods=Item.query.all()
+    logs=Log.query.filter_by(log_itemname=value).all()
+    print("zz: " , logs,type(logs[0]))
+    return '''{"log_id" : "%s" }''' % (logs[0].log_id)

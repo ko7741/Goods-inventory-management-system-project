@@ -46,16 +46,17 @@
             {% endfor %}
         {% endif %}
         {% endwith %}
-        <!-- <select id="goods" name="items">
+
+        <select id="goods" name="items">
             <option value="전체">전체</option>
             {% for item in goods%}
-            <option value=item.itemname>{{ item.itemname }}</option>
+            <option value={{item.itemname}}>{{ item.itemname }}</option>
             {% endfor %}
-        </select> -->
-        <ul>
+        </select>
+
+        <ul id="log_value">
             {% for log in logs %}
             <li class="log-item">
-                <p>
                 {{log.log_id}}
                 {{log.log_itemname}}
                 <span>입/출고:</span>
@@ -76,26 +77,76 @@
                 {% endif %}
                 <span>시간:</span>{{log.log_time.strftime('%Y-%m-%d %H:%M:%S')}}
                 <span>관리자:</span>{{log.log_representative}}
-                </p>
+                
             </li>
             {% endfor %}
             
             <form
                 action="{{url_for('crud.delete_log')}}"
                 method="POST"
+                onsubmit="return Delete()"
             >
                 {{ form.csrf_token }}
-                <input type="submit" value="LOG삭제" onclick="Delete()">
+                <input type="submit" value="LOG삭제" >
             </form>
             
         </ul>
     </details>
+
+
+
+    <!-- <script>
+        let a = document.querySelector("#goods")
+        a.addEventListener("change",()=>{
+            let b = document.querySelector("#log_value")
+            b.innerHTML=""
+        })
+
+    </script> -->
+    <script>
+        let a = document.querySelector("#goods")
+        let csrf_token_value = "{{ form.csrf_token._value() }}";
+        a.addEventListener("change",()=>{
+            let b = document.querySelector("#goods")
+            fetch("{{ url_for('crud.log_value')}}", {
+                method :"POST",
+                headers:{
+                    'Content-Type': 'application/json;charset=utf-8',
+                    "X-CSRFToken": csrf_token_value,  // CSRF 토큰 값
+                },
+                body : JSON.stringify({ // 여기서 사용
+                        value: b.value
+                    }),
+            })
+            .then(response => response.json()) // JSON 형식으로 파싱
+            .then(data => {
+
+                let a = document.querySelector("#log_value")
+                a.innerHTML=""
+                for(let i=0; i<data.length; i++){
+                    let b = document.createElement("li")
+                    b.textContent =
+                                data[i].log_id+" "+
+                                data[i].log_itemname+" 입/출고: "+
+                                data[i].log_item_quantity+" 현재 수량: "+
+                                data[i].log_item_quantity_now+" 시간: "+
+                                data[i].log_time+" 관리자: "+
+                                data[i].log_representative
+                    a.appendChild(b)
+                }
+            })
+
+        })
+
+    </script>
+
     <script>
         function Delete() {
             if (confirm("정말 삭제하시겠습니까?")) {
-                    
-                    window.location.href = "{{ url_for('crud.delete_log') }}";
-                }
+                return true
+            }else{
+                return false
             }
+        }
     </script>
 {% endblock %}

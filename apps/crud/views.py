@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template,redirect,url_for,flash
+from flask import Blueprint, jsonify, render_template,redirect,url_for,flash,request
+from sqlalchemy import JSON
 from apps.crud.forms import ItemForm
 from apps.app import db
 from apps.crud.models import Item,Log
@@ -97,3 +98,46 @@ def delete_log():
     db.session.commit()
     flash("로그가 삭제되었습니다.", "success")
     return redirect(url_for("crud.goods"))
+
+@crud.route("/logvalue", methods=["POST"])
+def log_value():
+    if request.method == 'POST':
+        data = request.json 
+        value = data.get('value') 
+
+        if value=="전체":
+            logs =Log.query.all()
+        else:
+            logs =Log.query.filter_by(log_itemname=value).all()
+
+        serialized_logs = []
+        for log in logs:
+            serialized_log = {
+                "log_id": log.log_id,
+                "log_itemname": log.log_itemname,
+                "log_item_quantity": log.log_item_quantity,
+                "log_item_quantity_now": log.log_item_quantity_now,
+                "log_time": log.log_time.strftime("%Y-%m-%d %H:%M:%S"),
+                "log_representative": log.log_representative
+            }
+            serialized_logs.append(serialized_log)
+        return jsonify(serialized_logs)
+            
+# @crud.route("/logvalue/<value>")
+# def log_value_view(value):
+#     print(value)
+#     form = ItemForm()
+#     goods=Item.query.all()
+#     logs=Log.query.filter_by(log_itemname=value).all()
+#     print("zz: " , logs)
+#     return render_template("crud/goods.html", goods = goods, logs=logs, form=form)
+    
+    
+    
+
+    # data = request.json  # 클라이언트에서 전달된 JSON 데이터를 가져옴
+    # value = data.form['value']  # JSON 데이터에서 'value' 키의 값을 가져옴
+    # form = ItemForm()
+    # goods=Item.query.all()
+    # logs=Log.query.filter_by(log_itemname = value).all()
+    # return render_template("crud/goods.html", goods = goods, logs=logs, form=form)
