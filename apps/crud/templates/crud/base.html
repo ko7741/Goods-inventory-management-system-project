@@ -9,10 +9,11 @@
 <body>
     <div>
         {% if current_user.is_authenticated %}
-        <p>
+        <span class="login">
+            <span>관리자 : </span>
             <span>{{ current_user.username }}</span>
             <span><a href="{{url_for('auth.logout')}}">로그아웃</a></span>
-        </p>
+        </span>
         {% endif %}
     </div>
     {% block content %}{% endblock %}

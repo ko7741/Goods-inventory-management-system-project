@@ -1,6 +1,7 @@
 {% extends "crud/base.html" %}
 {% block title%}수량 변경{% endblock %}
 {% block content %}
+<div class="container">
     <h2>수량 변경</h2>
     <form
         action="{{ url_for('crud.change_quantity', goods_id=item.id) }}"
@@ -34,4 +35,5 @@
         {% endfor %}
         <p><input type="submit" value="변경"></p>
     </form>
+</div>
 {% endblock %}

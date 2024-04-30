@@ -1,6 +1,7 @@
 {% extends "crud/base.html" %}
 {% block title%}관리자 신규 등록{% endblock %}
 {% block content %}
+<div class="container">
     <h2>관리자 신규 등록</h2>
     <form 
         action="{{ url_for('auth.signup', next=request.args.get('next')) }}" 
@@ -28,4 +29,5 @@
         {% endfor %}
         <p>{{ form.submit() }}</p>
     </form>
+</div>
 {% endblock %}

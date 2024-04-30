@@ -1,10 +1,13 @@
 {% extends "crud/base.html" %}
 {% block title%}제품 목록{% endblock %}
 {% block content %}
-    <h2>제품 목록</h2>
-    <a href="{{url_for('crud.create_goods',filename='style.css')}}">신규 제품 등록</a>
-
-    <table>
+    <div class="title">
+    <h2 class="h2">제품 목록</h2>
+    </div>
+    
+    <div class="container">
+    <p class="link"><a class="a" href="{{url_for('crud.create_goods',filename='style.css')}}">신규 제품 등록</a></p>
+    <table class="table_goods">
         <tr>
             <th>물품 ID</th>
             <th>물품명</th>
@@ -36,8 +39,7 @@
         </tr>
         {% endfor %}
     </table>
-
-    <details>
+    <details class="details">
         <summary>LOG보기</summary>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -93,7 +95,7 @@
         </ul>
     </details>
 
-
+    </div>
 
     <!-- <script>
         let a = document.querySelector("#goods")
@@ -125,6 +127,12 @@
                 a.innerHTML=""
                 for(let i=0; i<data.length; i++){
                     let b = document.createElement("li")
+                    if (data[i].log_item_quantity == null){
+                        data[i].log_item_quantity = "삭제"
+                    }
+                    if (data[i].log_item_quantity_now == null){
+                        data[i].log_item_quantity_now = "삭제"
+                    }
                     b.textContent =
                                 data[i].log_id+" "+
                                 data[i].log_itemname+" 입/출고: "+

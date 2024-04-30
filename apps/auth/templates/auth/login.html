@@ -1,25 +1,29 @@
 {% extends "crud/base.html" %}
 {% block title%}이것은 테스트 입니다.{% endblock %}
 {% block content %}
-<h2>로그인</h2>
+<div class="container">
+    <div class="login_back">
+    <h2>로그인</h2>
 
-<form 
-    action="{{ url_for('auth.login') }}" 
-    method="post" 
-    novalidate="novalidate"
->
-    {% for message in get_flashed_messages() %}
-        <p style="color: red;">{{ message }}</p>
-    {% endfor %} {{ form.csrf_token }}
-        <p>{{ form.useremail.label }} {{ form.useremail(placeholder="메일 주소") }}</p>
-    {% for error in form.useremail.errors %}
-        <span style="color: red;">{{ error }}</span>
-    {% endfor %}
-        <p>{{ form.password.label }} {{ form.password(placeholder="비밀번호") }}</p>
-    {% for error in form.password.errors %}
-        <span style="color: red;">{{ error }}</span>
-    {% endfor %}
-    <span>{{ form.submit() }}</span>
-    <button><a href="{{url_for('auth.signup')}}" style="text-decoration: none;color: inherit;">관리자 가입하기</a></button>
-</form>
+    <form 
+        action="{{ url_for('auth.login') }}" 
+        method="post" 
+        novalidate="novalidate"
+    >
+        {% for message in get_flashed_messages() %}
+            <p style="color: red;">{{ message }}</p>
+        {% endfor %} {{ form.csrf_token }}
+            <p>{{ form.useremail.label }} {{ form.useremail(placeholder="메일 주소") }}</p>
+        {% for error in form.useremail.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+            <p>{{ form.password.label }} {{ form.password(placeholder="비밀번호") }}</p>
+        {% for error in form.password.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+        <span>{{ form.submit() }}</span>
+        <button><a href="{{url_for('auth.signup')}}" style="text-decoration: none;color: inherit;">관리자 가입하기</a></button>
+    </form>
+    </div>
+</div>
 {% endblock %}
