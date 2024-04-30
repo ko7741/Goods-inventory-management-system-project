@@ -121,7 +121,7 @@
             })
             .then(response => response.json()) // JSON 형식으로 파싱
             .then(data => {
-
+                
                 let a = document.querySelector("#log_value")
                 a.innerHTML=""
                 for(let i=0; i<data.length; i++){
