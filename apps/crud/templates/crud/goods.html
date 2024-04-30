@@ -83,16 +83,15 @@
             </li>
             {% endfor %}
             
-            <form
+        </ul>
+        <form
                 action="{{url_for('crud.delete_log')}}"
                 method="POST"
                 onsubmit="return Delete()"
             >
                 {{ form.csrf_token }}
                 <input type="submit" value="LOG삭제" >
-            </form>
-            
-        </ul>
+        </form>
     </details>
 
     </div>
