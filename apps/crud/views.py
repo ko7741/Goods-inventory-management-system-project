@@ -34,7 +34,7 @@ def create_goods():
             log_itemname=form.itemname.data,
             log_item_quantity=form.item_quantity.data,
             log_item_quantity_now=form.item_quantity.data,
-            log_time=datetime.now(),
+            log_time=form.time.data,
             log_representative = current_user.username
         )
         db.session.add(item)
